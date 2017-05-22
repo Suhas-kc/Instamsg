@@ -36,7 +36,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                     // Wifi P2P is enabled
                 } else {
                     // Wi-Fi P2P is not enabled
-                    Toast.makeText(mActivity,"Wifi p2p is not enabled",Toast.LENGTH_SHORT);
+                    Toast.makeText(mActivity,"Wifi p2p is not enabled",Toast.LENGTH_SHORT).show();
+
                 }
             }
 

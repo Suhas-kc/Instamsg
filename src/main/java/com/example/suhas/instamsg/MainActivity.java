@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -12,6 +13,7 @@ import android.support.v4.util.LogWriter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +21,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     WifiP2pManager managerObj;
     WifiP2pManager.Channel channelObj;
     WiFiDirectBroadcastReceiver receiverObj;
     IntentFilter filterObj;
     TextView macAddress;
+    WifiP2pConfig deviceConfig;
     final List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
 
 
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 // of the change.  For instance, if you have a ListView of
                 // available peers, trigger and
                 for(WifiP2pDevice phone:peers){
-                    temp = temp + phone.deviceAddress + "\n";
+                    temp = temp + phone.deviceName + "\n";
                 }
 
                 macAddress.setText(temp);
@@ -51,6 +54,22 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (peers.size() == 0) {
+                macAddress.setText("No peers found :(");
+            }
+            else{
+                deviceConfig = new WifiP2pConfig();
+                deviceConfig.deviceAddress = peers.get(0).deviceAddress;
+                managerObj.connect(channelObj, deviceConfig, new WifiP2pManager.ActionListener() {
+                    @Override
+                    public void onSuccess() {
+                        macAddress.setText("Connection to " + deviceConfig.deviceAddress + "is successful");
+                    }
+
+                    @Override
+                    public void onFailure(int reason) {
+
+                    }
+                });
 
             }
         }
@@ -71,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         filterObj.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         filterObj.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         filterObj.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
 
         managerObj.discoverPeers(channelObj, new WifiP2pManager.ActionListener() {
             @Override
@@ -102,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         unregisterReceiver(receiverObj);
     }
+
+
+
 }
 
 
