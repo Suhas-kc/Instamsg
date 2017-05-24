@@ -22,56 +22,38 @@ import java.util.Collection;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
-
+    private static final String TAG = "MainActivity";
     WifiP2pManager managerObj;
     WifiP2pManager.Channel channelObj;
     WiFiDirectBroadcastReceiver receiverObj;
     IntentFilter filterObj;
     TextView macAddress;
-    WifiP2pConfig deviceConfig;
     final List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
-
-
     private WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
         @Override
         public void onPeersAvailable(WifiP2pDeviceList peerList) {
 
             Collection<WifiP2pDevice> refreshedPeers = peerList.getDeviceList();
-            if (!refreshedPeers.equals(peers)) {
+            if (peers.size() == 0) {
+
+            }
+            else if (!refreshedPeers.equals(peers)) {
                 peers.clear();
                 peers.addAll(refreshedPeers);
                 String temp = "";
                 // If an AdapterView is backed by this data, notify it
                 // of the change.  For instance, if you have a ListView of
                 // available peers, trigger and
-                for(WifiP2pDevice phone:peers){
-                    temp = temp + phone.deviceName + "\n";
-                }
+                //for(WifiP2pDevice phone:peers){
+                //    temp = temp + phone.deviceAddress + "\n";
+                //}
 
-                macAddress.setText(temp);
+                macAddress.setText(peers.get(0).deviceAddress);
                 // Perform any other updates needed based on the new list of
                 // peers connected to the Wi-Fi P2P network.
             }
 
-            if (peers.size() == 0) {
-                macAddress.setText("No peers found :(");
-            }
-            else{
-                deviceConfig = new WifiP2pConfig();
-                deviceConfig.deviceAddress = peers.get(0).deviceAddress;
-                managerObj.connect(channelObj, deviceConfig, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        macAddress.setText("Connection to " + deviceConfig.deviceAddress + "is successful");
-                    }
 
-                    @Override
-                    public void onFailure(int reason) {
-
-                    }
-                });
-
-            }
         }
     };
 
@@ -80,10 +62,28 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         macAddress = (TextView)findViewById(R.id.testDev);
+        macAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String devAddress = macAddress.getText().toString();
+                WifiP2pConfig configDevice = new WifiP2pConfig();
+                configDevice.deviceAddress = devAddress;
+                managerObj.connect(channelObj, configDevice, new WifiP2pManager.ActionListener() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d(TAG,"Connection initiated successfully");
+                    }
 
+                    @Override
+                    public void onFailure(int reason) {
+                        Log.d(TAG,"Connection failed: " + reason);
+                    }
+                });
+            }
+        });
         managerObj = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channelObj = managerObj.initialize(this,getMainLooper(),null);
-        receiverObj = new WiFiDirectBroadcastReceiver(managerObj,channelObj,this,peerListListener);
+        receiverObj = new WiFiDirectBroadcastReceiver(managerObj,channelObj,this,peerListListener,this.getApplicationContext());
 
         filterObj = new IntentFilter();
         filterObj.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -91,16 +91,17 @@ public class MainActivity extends AppCompatActivity{
         filterObj.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         filterObj.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-
         managerObj.discoverPeers(channelObj, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 //Log or leave empty
+                Log.d(TAG,"Peer discovery successful");
             }
 
             @Override
             public void onFailure(int reason) {
                 //Log or leave empty
+                Log.d(TAG,"Peer discovery unsuccessful");
             }
         });
 
@@ -122,9 +123,6 @@ public class MainActivity extends AppCompatActivity{
         super.onPause();
         unregisterReceiver(receiverObj);
     }
-
-
-
 }
 
 
