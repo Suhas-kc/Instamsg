@@ -36,10 +36,8 @@ public class MainActivity extends AppCompatActivity{
         public void onPeersAvailable(WifiP2pDeviceList peerList) {
 
             Collection<WifiP2pDevice> refreshedPeers = peerList.getDeviceList();
-            if (peers.size() == 0) {
-                Log.d("MainActivity","No peers found");
-            }
-            else if (!refreshedPeers.equals(peers)) {
+
+            if (!refreshedPeers.equals(peers)) {
                 peers.clear();
                 peers.addAll(refreshedPeers);
                 String temp = "";
@@ -53,6 +51,10 @@ public class MainActivity extends AppCompatActivity{
                 macAddress.setText(peers.get(0).deviceAddress);
                 // Perform any other updates needed based on the new list of
                 // peers connected to the Wi-Fi P2P network.
+            }
+
+            if (peers.size() == 0) {
+                Log.d("MainActivity","No peers found");
             }
 
 
