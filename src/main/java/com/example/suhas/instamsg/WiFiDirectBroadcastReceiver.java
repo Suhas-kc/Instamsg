@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.net.InetAddress;
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
+    public static final String EXTRA_MESSAGE = "com.example.suhas.instamsg.MESSAGE";
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
@@ -84,9 +85,11 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             // you'll want to create a peer thread that connects
                             // to the group owner.
                             Log.d("BroadcastReceiver","Starting client thread");
-
-                            new ClientClass(groupOwnerAddress).execute();
-
+                            String clientIP = ClientClass.getLocalIpAddress();
+                            new ClientClass(groupOwnerAddress).execute(clientIP);
+                            Intent i = new Intent(context,ChatActivity.class);
+                            i.putExtra(EXTRA_MESSAGE,groupOwnerAddress.getHostAddress());
+                            context.startActivity(i);
                             Log.d("BroadcastReceiver","Started client thread");
 
                         }

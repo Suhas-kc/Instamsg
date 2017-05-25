@@ -1,6 +1,7 @@
 package com.example.suhas.instamsg;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,11 +12,14 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import static android.support.v4.content.ContextCompat.startActivity;
+
 /**
  * Created by suhas on 23/5/17.
  */
 
 public class ServerTask extends AsyncTask<Void,Void,String> {
+    public static final String EXTRA_MESSAGE = "com.example.suhas.instamsg.MESSAGE";
     Context context;
     ServerTask(Context context){
         this.context = context;
@@ -43,11 +47,9 @@ public class ServerTask extends AsyncTask<Void,Void,String> {
 
     @Override
     protected void onPostExecute(String result) {
-
-            Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-
-
-
-
+        Intent i = new Intent(context,ChatActivity.class);
+        i.putExtra(EXTRA_MESSAGE,result);
+        context.startActivity(i);
     }
 }
+
