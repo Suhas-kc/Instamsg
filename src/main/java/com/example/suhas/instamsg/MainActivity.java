@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity{
     WiFiDirectBroadcastReceiver receiverObj;
     IntentFilter filterObj;
     TextView macAddress;
+    Button refreshBtn;
     final List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     private WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
         @Override
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity{
 
             Collection<WifiP2pDevice> refreshedPeers = peerList.getDeviceList();
             if (peers.size() == 0) {
-
+                Log.d("MainActivity","No peers found");
             }
             else if (!refreshedPeers.equals(peers)) {
                 peers.clear();
@@ -61,6 +63,24 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        refreshBtn = (Button) findViewById(R.id.button);
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                managerObj.discoverPeers(channelObj, new WifiP2pManager.ActionListener() {
+                    public void onSuccess() {
+                        //Log or leave empty
+                        Log.d(TAG,"Peer discovery successful");
+                    }
+
+                    @Override
+                    public void onFailure(int reason) {
+                        //Log or leave empty
+                        Log.d(TAG,"Peer discovery unsuccessful");
+                    }
+                });
+            }
+        });
         macAddress = (TextView)findViewById(R.id.testDev);
         macAddress.setOnClickListener(new View.OnClickListener() {
             @Override
