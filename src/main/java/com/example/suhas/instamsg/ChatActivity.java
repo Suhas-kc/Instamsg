@@ -64,10 +64,10 @@ public class ChatActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        
-        while (flag){
+
+
             receiveMessage(this.getApplicationContext());
-        }
+
     }
 
 }

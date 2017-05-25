@@ -53,7 +53,7 @@ public class ClientClass extends AsyncTask<String,Void,Void> {
             DataOutputStream DOS = new DataOutputStream(socket.getOutputStream());
             DOS.writeUTF(params[0]);
             socket.close();
-            Log.d("ClientClass","Client finished sending message");
+            Log.d("ClientClass","Client finished sending message: "+params[0]);
 
         } catch (IOException e) {
             e.printStackTrace();

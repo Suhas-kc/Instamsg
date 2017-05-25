@@ -1,6 +1,7 @@
 package com.example.suhas.instamsg;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -14,7 +15,7 @@ public class MessageServer extends ServerTask {
 
     @Override
     protected void onPostExecute(String result){
-
+        Log.d("MessageServer","MessageServer received message: "+result);
         Toast.makeText(context,result,Toast.LENGTH_LONG).show();
     }
 }
