@@ -17,6 +17,7 @@ public class User {
     }
 
     public static void receiveMessage(Context context){
+        Log.d("User","MessageServer started");
         new MessageServer(context).execute();
     }
 }

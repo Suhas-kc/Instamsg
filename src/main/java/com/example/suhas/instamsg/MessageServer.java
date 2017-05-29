@@ -14,6 +14,12 @@ public class MessageServer extends ServerTask {
     }
 
     @Override
+    protected String doInBackground(Void... params){
+        String msg = super.doInBackground();
+        return msg;
+    }
+
+    @Override
     protected void onPostExecute(String result){
         Log.d("MessageServer","MessageServer received message: "+result);
         Toast.makeText(context,result,Toast.LENGTH_LONG).show();
