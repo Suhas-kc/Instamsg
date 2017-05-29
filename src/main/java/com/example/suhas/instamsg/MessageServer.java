@@ -17,5 +17,6 @@ public class MessageServer extends ServerTask {
     protected void onPostExecute(String result){
         Log.d("MessageServer","MessageServer received message: "+result);
         Toast.makeText(context,result,Toast.LENGTH_LONG).show();
+        new MessageServer(context).execute();
     }
 }

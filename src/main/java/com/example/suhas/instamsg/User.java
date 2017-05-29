@@ -1,6 +1,7 @@
 package com.example.suhas.instamsg;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.net.InetAddress;
 
@@ -10,6 +11,7 @@ import java.net.InetAddress;
 
 public class User {
     public static void sendMessage(String msg, InetAddress serverAddress){
+        Log.d("User","Sending message: "+msg);
         new ClientClass(serverAddress).execute(msg);
 
     }

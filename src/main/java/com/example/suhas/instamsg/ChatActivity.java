@@ -40,6 +40,7 @@ public class ChatActivity extends AppCompatActivity {
 
         try {
             final InetAddress inetAddress = InetAddress.getByName(serverAddress);
+            Log.d("ChatActivity","Server address is : "+serverAddress);
             sendMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
