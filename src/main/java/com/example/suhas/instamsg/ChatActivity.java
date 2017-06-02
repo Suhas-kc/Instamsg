@@ -67,7 +67,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-            receiveMessage(this.getApplicationContext());
+            receiveMessage(this);
 
     }
 

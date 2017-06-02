@@ -15,7 +15,10 @@ public class MessageServer extends ServerTask {
 
     @Override
     protected String doInBackground(Void... params){
+
         String msg = super.doInBackground();
+        Log.d("MessageServer","MessageServer started");
+        Log.d("MessageServer","MessageServer received: " + msg);
         return msg;
     }
 

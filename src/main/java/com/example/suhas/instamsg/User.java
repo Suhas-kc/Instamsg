@@ -11,13 +11,12 @@ import java.net.InetAddress;
 
 public class User {
     public static void sendMessage(String msg, InetAddress serverAddress){
-        Log.d("User","Sending message: "+msg);
+        Log.d("User","Sending message: "+msg+" to: " +serverAddress.toString());
         new ClientClass(serverAddress).execute(msg);
 
     }
 
     public static void receiveMessage(Context context){
-        Log.d("User","MessageServer started");
         new MessageServer(context).execute();
     }
 }
