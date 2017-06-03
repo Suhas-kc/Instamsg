@@ -55,6 +55,8 @@ public class ChatActivity extends AppCompatActivity {
             Log.e("ChatActivity","Unknown host exception : " + e);
 
         }
+        receiveMessage(this);
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -67,7 +69,6 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-            receiveMessage(this);
 
     }
 
