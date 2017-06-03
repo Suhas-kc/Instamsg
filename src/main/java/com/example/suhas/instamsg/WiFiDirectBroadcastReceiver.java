@@ -7,9 +7,10 @@ import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
-
 import java.net.InetAddress;
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
@@ -77,7 +78,11 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             // One common case is creating a group owner thread and accepting
                             // incoming connections.
                             Log.d("BroadcastReceiver","Starting server thread");
-                            new ServerTask(context).execute();
+                            ServerTask server = new ServerTask(context);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                                server.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+                            else
+                                server.execute((Void[])null);
                             Log.d("BroadcastReceiver","Server is running");
 
                         } else if (info.groupFormed) {
@@ -86,7 +91,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             // to the group owner.
                             Log.d("BroadcastReceiver","Starting client thread");
                             String clientIP = ClientClass.getLocalIpAddress();
-                            new ClientClass(groupOwnerAddress).execute(clientIP);
+                            User.sendMessage(clientIP,groupOwnerAddress);
                             Intent i = new Intent(context,ChatActivity.class);
                             i.putExtra(EXTRA_MESSAGE,groupOwnerAddress.getHostAddress());
                             context.startActivity(i);
