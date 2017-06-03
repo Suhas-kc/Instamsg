@@ -55,7 +55,7 @@ public class ChatActivity extends AppCompatActivity {
             Log.e("ChatActivity","Unknown host exception : " + e);
 
         }
-        receiveMessage(this);
+        receiveMessage(this.getApplicationContext());
 
 
 

@@ -19,6 +19,7 @@ import java.util.Enumeration;
 
 public class ClientClass extends AsyncTask<String,Void,Void> {
     InetAddress serverAddress;
+    static String TAG = "ClientClass";
     ClientClass(InetAddress inetAddress){
         serverAddress = inetAddress;
 
@@ -45,19 +46,20 @@ public class ClientClass extends AsyncTask<String,Void,Void> {
     protected Void doInBackground(String... params) {
         Socket socket = null;
         if (params.length > 1 ) {
-            Log.e("ClientClass","ClientClass got more than one string as input parameter");
+            Log.e(TAG,"ClientClass got more than one string as input parameter");
             return null;
         }
         try {
+            Log.d(TAG,"Starting to send message");
             socket = new Socket(serverAddress,8888);
             DataOutputStream DOS = new DataOutputStream(socket.getOutputStream());
             DOS.writeUTF(params[0]);
             socket.close();
-            Log.d("ClientClass","Client finished sending message: "+params[0]);
+            Log.d(TAG,"Client finished sending message: "+params[0]);
 
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("ClientClass","Client failed",e);
+            Log.e(TAG,"Client failed",e);
         }
         return null;
     }
